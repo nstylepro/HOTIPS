@@ -1,1 +1,3 @@
 # HOTIPS
+
+# GODS PLAN
