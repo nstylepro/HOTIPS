@@ -28,7 +28,7 @@ struct EventProperty {
 class EventParser {
 public:
 	EventParser(PEVENT_RECORD record);
-	
+
 	PTRACE_EVENT_INFO GetEventInfo() const;
 	PEVENT_RECORD GetEventRecord() const;
 	const EVENT_HEADER& GetEventHeader() const;

@@ -108,6 +108,6 @@ std::wstring EventProperty::GetIpAddress() const {
 	{
 		octet[i] = ipAddress >> (i * 8);
 	}
-	swprintf(ipAddressFinal, 16, L"%d.%d.%d.%d", octet[3], octet[2], octet[1], octet[0]);
+	swprintf(ipAddressFinal, 16, L"%d.%d.%d.%d", octet[0], octet[1], octet[2], octet[3]);
 	return ipAddressFinal;
 }
