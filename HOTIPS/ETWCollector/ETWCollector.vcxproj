@@ -155,7 +155,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ETWCollector.cpp" />
     <ClCompile Include="EventParser.cpp" />
     <ClCompile Include="TraceManager.cpp" />
   </ItemGroup>

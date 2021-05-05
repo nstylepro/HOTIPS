@@ -23,8 +23,8 @@ typedef struct NetworkEvent
 	uint32_t PacketSize;
 	std::wstring DestAddress;
 	std::wstring SourceAddress;
-	uint32_t DestPort;
-	uint32_t SourcePort;
+	uint16_t DestPort;
+	uint16_t SourcePort;
 } * PNetworkEvent;
 
 class TraceManager final {

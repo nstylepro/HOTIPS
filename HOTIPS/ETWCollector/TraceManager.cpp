@@ -72,9 +72,9 @@ void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
 		else if (prop.Name == L"daddr")
 			parsedEvent.DestAddress = prop.GetIpAddress().c_str();
 		else if (prop.Name == L"sport")
-			parsedEvent.SourcePort = prop.GetValue<uint32_t>();
+			parsedEvent.SourcePort = prop.GetValue<uint16_t>();
 		else if (prop.Name == L"dport")
-			parsedEvent.DestPort = prop.GetValue<uint32_t>();
+			parsedEvent.DestPort = prop.GetValue<uint16_t>();
 		else if (prop.Name == L"PID")
 			parsedEvent.PID = prop.GetValue<uint32_t>();
 		else if (prop.Name == L"size")
