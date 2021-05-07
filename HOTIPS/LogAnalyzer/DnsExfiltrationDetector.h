@@ -1,16 +1,14 @@
 #pragma once
 
-#include <Windows.h>
-#include <tdh.h>
 #include <memory>
 
 class DnsExfiltrationDetector
 {
-	uint32_t m_packetSizeThreshold = 0;
-	uint16_t m_dnsPort = 53;
+	static const uint32_t m_packetSizeThreshold = 255;
+	static const uint16_t m_dnsPort = 53;
 
-public:
-	bool IsDnsPacket(uint16_t dPort) const;
-	bool DetectDnsExfiltration(uint32_t packetSize) const;
+public:	
+	static bool is_dns_packet(uint16_t d_port);
+	static bool detect_dns_exfiltration(uint32_t packet_size);
 };
 

@@ -2,11 +2,11 @@
 #include <cstdint>
 
 #include "../ETWCollector/EventParser.h"
+#include "../ETWCollector/TraceManager.h"
 
 class TcpPortScanDetector
 {
-	const uint8_t c_port_count_threshold = 50;
-
+	static const uint32_t c_port_count_threshold = 32;
 public:
-	bool DetectPortScan(std::vector<EventProperty>& tcpPackets) const;
+	static bool detect_port_scan(const std::vector<PNetworkEvent>& network_events);
 };

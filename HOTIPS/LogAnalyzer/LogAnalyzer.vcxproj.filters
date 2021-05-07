@@ -24,6 +24,12 @@
     <ClInclude Include="TcpPortScanDetector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Orchestrator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DnsExfiltrationDetector.cpp">
@@ -35,5 +41,14 @@
     <ClCompile Include="TcpPortScanDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Orchestrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

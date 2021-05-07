@@ -1,12 +1,12 @@
 #include "TcpPortScanDetector.h"
+#include "../ETWCollector/TraceManager.h"
 
-bool TcpPortScanDetector::DetectPortScan(std::vector<EventProperty>& tcpPackets) const
+bool TcpPortScanDetector::detect_port_scan(const std::vector<PNetworkEvent>& network_events)
 {
 	std::vector<uint16_t> ports;
-	ports.reserve(tcpPackets.size());
-	for (auto& element : tcpPackets)
+	for (const auto& element : network_events)
 	{
-		ports.emplace_back(element);
+		ports.emplace_back(element->DestPort);
 	}
 
 	if (ports.size() >= c_port_count_threshold)
