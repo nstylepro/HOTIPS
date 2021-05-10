@@ -14,6 +14,11 @@
 
 #pragma comment(lib, "tdh")
 
+enum EventTask {
+	KERNEL_NETWORK_TASK_TCPIP = 10,
+	KERNEL_NETWORK_TASK_UDPIP = 11,
+};
+
 typedef struct NetworkEvent
 {
 	uint32_t EventType;
