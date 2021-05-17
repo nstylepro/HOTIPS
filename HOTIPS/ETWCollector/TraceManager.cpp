@@ -65,6 +65,11 @@ void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
 
 	parsedEvent.EventTime = *(FILETIME*)&parser.GetEventHeader().TimeStamp.QuadPart;
 	parsedEvent.EventType = parser.GetEventHeader().EventDescriptor.Opcode;
+
+	if (parser.GetEventHeader().EventDescriptor.Task)
+		parsedEvent.Protocol = (KERNEL_NETWORK_TASK_TCPIP == parser.GetEventHeader().EventDescriptor.Task) ? IPPROTO_TCP : IPPROTO_UDP;
+	else
+		parsedEvent.Protocol = 0;
 	
  	for (auto& prop : parser.GetProperties()) {
 		if (prop.Name == L"saddr")
