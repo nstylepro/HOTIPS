@@ -155,6 +155,7 @@
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="IPSweepDetector.h" />
     <ClInclude Include="Orchestrator.h" />
+    <ClInclude Include="report_event.h" />
     <ClInclude Include="TcpPortScanDetector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="IPSweepDetector.cpp" />
     <ClCompile Include="Orchestrator.cpp" />
+    <ClCompile Include="report_event.cpp" />
     <ClCompile Include="TcpPortScanDetector.cpp" />
   </ItemGroup>
   <ItemGroup>

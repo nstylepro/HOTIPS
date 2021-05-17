@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <atltime.h>
 #include <atlstr.h>
-#include <iostream>
 #include <chrono>
 #include <ctime>    
 
@@ -43,14 +42,14 @@ void OnEventCallback(PNetworkEvent event) {
 	if (m_current_window_start.duration().count() >= 60000)
  	{
 		// Pass events to detections
-		Orchestrator::EventOrchestrator(m_events);
+		Orchestrator::event_orchestrator(m_events);
 		m_events.clear();
 		m_current_window_start.tick();
 	}
 	
-	if (!m_events.max_size())
+	if (m_events.size() <= m_events.max_size())
 	{
-		m_events.emplace_back(event);
+		m_events.push_back(event);
 	}
 }
 

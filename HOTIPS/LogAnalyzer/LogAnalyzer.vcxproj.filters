@@ -30,6 +30,9 @@
     <ClInclude Include="HttpClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="report_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DnsExfiltrationDetector.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HttpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="report_event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
