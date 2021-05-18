@@ -148,6 +148,9 @@
     <ProjectReference Include="..\ETWCollector\ETWCollector.vcxproj">
       <Project>{6f3388b0-00b6-48e7-b425-7e51cc91839a}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.vcxproj">
+      <Project>{a09e7bdc-84cd-4331-a00e-92a07af06f4e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Timer.h" />

@@ -1,18 +1,62 @@
 #include "TcpPortScanDetector.h"
+
+
+#include <map>
+#include <unordered_map>
+
 #include "../ETWCollector/TraceManager.h"
 
-bool TcpPortScanDetector::detect_port_scan(const std::vector<PNetworkEvent>& network_events)
+const std::wstring TcpPortScanDetector::c_alert_name = L"TcpPortScan";
+
+
+std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNetworkEvent>& network_events)
 {
-	std::vector<uint16_t> ports;
+	// Get time
+	FILETIME ft;
+	SYSTEMTIME st;
+
+	GetSystemTime(&st); // gets current time
+	SystemTimeToFileTime(&st, &ft);
+
+	// Makes a vector of SourceAddress, DestAddress, DestPort
+	std::vector<std::tuple<std::wstring, std::wstring, uint16_t>> ports_tuples;
+	std::vector<report_event> reports;
 	for (const auto& element : network_events)
 	{
-		ports.emplace_back(element->DestPort);
+		ports_tuples.emplace_back(element->SourceAddress, element->DestAddress, element->DestPort);
 	}
 
-	if (ports.size() >= c_port_count_threshold)
+	// Key: DestAddress, Value: <Key : Port, Value: Count>
+	std::map<std::wstring, std::vector<uint16_t>> addr_port_pair_count_map;
+	for (std::tuple<std::wstring, std::wstring, uint16_t> packet : ports_tuples)
 	{
-		return true;
+		std::wstring src_ip = std::get<0>(packet);
+		std::wstring dst_ip = std::get<1>(packet);
+		uint16_t dst_port = std::get<2>(packet);
+
+		auto dst_addr_key = addr_port_pair_count_map.find(dst_ip);
+		if (dst_addr_key != addr_port_pair_count_map.end())
+		{
+
+			dst_addr_key->second.emplace_back(dst_port);
+		}
+		else
+		{
+			std::vector<uint16_t> ports = { dst_port };
+			addr_port_pair_count_map.insert(make_pair(dst_ip, ports));
+		}
 	}
 
-	return false;
+
+	for (auto addr_port_count : addr_port_pair_count_map)
+	{
+		if (addr_port_count.second.size() >= c_port_count_threshold)
+		{
+			std::vector<uint16_t> src_ports_arr;
+			auto report = report_event(c_alert_name, ft, network_events.front()->SourceAddress, addr_port_count.first.c_str(), src_ports_arr, addr_port_count.second);
+			reports.emplace_back(report);
+		}
+	}
+
+	return reports;
 }

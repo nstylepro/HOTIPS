@@ -25,7 +25,7 @@ public:
 
     template <class TT = TimeT>
     TT duration() const {
-        gsl_Expects(_end != timep_t{} && "toc before reporting");
+        //gsl_Expects(_end != timep_t{} && "toc before reporting");
         return std::chrono::duration_cast<TT>(_end - _start);
     }
 };

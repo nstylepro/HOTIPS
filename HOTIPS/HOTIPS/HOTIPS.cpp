@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <atltime.h>
 #include <atlstr.h>
-#include <iostream>
 #include <chrono>
 #include <ctime>    
 
@@ -27,7 +26,6 @@ void OnEventCallback(PNetworkEvent event) {
 	switch (event->EventType) {
 	case EVENT_TRACE_TYPE_ACCEPT:					eventType = L"Accept event"; break;
 	case EVENT_TRACE_TYPE_CONNECT:					eventType = L"Connect event"; break;
-	case EVENT_TRACE_TYPE_RECEIVE:					eventType = L"Receive event"; break;
 	case EVENT_TRACE_TYPE_SEND:						eventType = L"Send event"; break;
 	default:										return;
 	}
@@ -43,14 +41,14 @@ void OnEventCallback(PNetworkEvent event) {
 	if (m_current_window_start.duration().count() >= 60000)
  	{
 		// Pass events to detections
-		Orchestrator::EventOrchestrator(m_events);
+		Orchestrator::event_orchestrator(m_events);
 		m_events.clear();
 		m_current_window_start.tick();
 	}
 	
-	if (!m_events.max_size())
+	if (m_events.size() <= m_events.max_size())
 	{
-		m_events.emplace_back(event);
+		m_events.push_back(event);
 	}
 }
 
