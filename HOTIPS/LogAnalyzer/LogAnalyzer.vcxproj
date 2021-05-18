@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DnsExfiltrationDetector.h" />
+    <ClInclude Include="Firewall_Rules.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="IPSweepDetector.h" />
     <ClInclude Include="Orchestrator.h" />
