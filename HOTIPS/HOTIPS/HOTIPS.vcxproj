@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3a22da63-e474-4600-a52b-d934b222a658}</ProjectGuid>
-    <RootNamespace>LogAnalyzer</RootNamespace>
+    <ProjectGuid>{3d580d0f-fa64-4585-9a8b-ead223cb1c46}</ProjectGuid>
+    <RootNamespace>HOTIPS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,17 +139,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DnsExfiltrationDetector.cpp" />
-    <ClCompile Include="IPSweepDetector.cpp" />
-    <ClCompile Include="LogAnalyzer.cpp" />
-    <ClCompile Include="TcpPortScanDetector.cpp" />
+    <ClCompile Include="HOTIPS.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DnsExfiltrationDetector.h" />
-    <ClInclude Include="IPSweepDetector.h" />
-    <ClInclude Include="TcpPortScanDetector.h" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ETWCollector\ETWCollector.vcxproj">
+      <Project>{6f3388b0-00b6-48e7-b425-7e51cc91839a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.vcxproj">
+      <Project>{a09e7bdc-84cd-4331-a00e-92a07af06f4e}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+  </Target>
 </Project>

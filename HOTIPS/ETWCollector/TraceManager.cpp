@@ -4,7 +4,7 @@ TraceManager::~TraceManager() {
 	Stop();
 }
 
-bool TraceManager::Start(std::function<void(PEVENT_RECORD)> cb) {
+bool TraceManager::Start(std::function<void(PNetworkEvent)> cb) {
 	if (_handle || _hTrace)
 		return true;
 
@@ -59,8 +59,35 @@ bool TraceManager::Stop() {
 }
 
 void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
+
+	EventParser parser(rec);
+	NetworkEvent parsedEvent = {};
+
+	parsedEvent.EventTime = *(FILETIME*)&parser.GetEventHeader().TimeStamp.QuadPart;
+	parsedEvent.EventType = parser.GetEventHeader().EventDescriptor.Opcode;
+
+	if (parser.GetEventHeader().EventDescriptor.Task)
+		parsedEvent.Protocol = (KERNEL_NETWORK_TASK_TCPIP == parser.GetEventHeader().EventDescriptor.Task) ? IPPROTO_TCP : IPPROTO_UDP;
+	else
+		parsedEvent.Protocol = 0;
+	
+ 	for (auto& prop : parser.GetProperties()) {
+		if (prop.Name == L"saddr")
+			parsedEvent.SourceAddress = prop.GetIpAddress().c_str();
+		else if (prop.Name == L"daddr")
+			parsedEvent.DestAddress = prop.GetIpAddress().c_str();
+		else if (prop.Name == L"sport")
+			parsedEvent.SourcePort = prop.GetValue<uint16_t>();
+		else if (prop.Name == L"dport")
+			parsedEvent.DestPort = prop.GetValue<uint16_t>();
+		else if (prop.Name == L"PID")
+			parsedEvent.PID = prop.GetValue<uint32_t>();
+		else if (prop.Name == L"size")
+			parsedEvent.PacketSize = prop.GetValue<uint32_t>();
+	}
+
 	if (_callback)
-		_callback(rec);
+		_callback(&parsedEvent);
 }
 
 DWORD TraceManager::Run() {
