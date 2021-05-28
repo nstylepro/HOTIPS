@@ -19,7 +19,7 @@ void HttpClient::send_event(int eventId, char* ip, char* datetime)
 	s_hints.ai_protocol = IPPROTO_TCP;
 	s_hints.ai_family = AF_INET;
 
-	auto i_result = getaddrinfo("localhost", "4444", &s_hints, &s_result);
+	auto i_result = getaddrinfo("10.10.248.139", "8000", &s_hints, &s_result);
 	if (i_result != 0)
 	{
 		WSACleanup();

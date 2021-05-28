@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Orchestrator.h"
 #include "DnsExfiltrationDetector.h"
 #include "HttpClient.h"
@@ -5,15 +6,31 @@
 #include "TcpPortScanDetector.h"
 #include "Firewall_Rules.h"
 
+#include <ctime>
+#include <comdef.h> 
+
 void Orchestrator::event_orchestrator(std::vector<PNetworkEvent> network_events)
 {
+	int eventId = 9999;
+
+	time_t now;
+	time(&now);
+	char datetime[sizeof "2011-10-08T07:07:09Z"];
+	strftime(datetime, sizeof datetime, "%FT%TZ", gmtime(&now));
+
 	auto tcp_port_scan_reports = TcpPortScanDetector::detect_port_scan(network_events);
 	if (!tcp_port_scan_reports.empty())
 	{
 		// Do something
 		std::vector<PNetworkEvent>::iterator it = network_events.begin();
 		block_ip((*it)->DestAddress);
-		// HttpClient::send_event(eventId, ip, datetime);
+
+		// TODO 
+		// eventId = real event ID
+		// Convert wchar to char
+		_bstr_t b((*it)->DestAddress.c_str());
+		char* ip = b;
+		HttpClient::send_event(eventId, ip, datetime);
 	}
 
 	const auto ip_sweep_reports = IPSweepDetector::detect_ip_sweep(network_events);
