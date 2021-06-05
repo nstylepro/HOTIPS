@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include "Orchestrator.h"
 #include "DnsExfiltrationDetector.h"
 #include "HttpClient.h"
@@ -8,6 +9,8 @@
 
 #include <ctime>
 #include <comdef.h> 
+
+#include "IOCDetector.h"
 
 void Orchestrator::event_orchestrator(std::vector<PNetworkEvent> network_events)
 {
@@ -22,7 +25,7 @@ void Orchestrator::event_orchestrator(std::vector<PNetworkEvent> network_events)
 	if (!tcp_port_scan_reports.empty())
 	{
 		// Do something
-		std::vector<PNetworkEvent>::iterator it = network_events.begin();
+		const std::vector<PNetworkEvent>::iterator it = network_events.begin();
 		block_ip((*it)->DestAddress);
 
 		// TODO 
@@ -38,6 +41,15 @@ void Orchestrator::event_orchestrator(std::vector<PNetworkEvent> network_events)
 	{
 		// ICMP ping sweep	
 		block_icmp();
+		// HttpClient::send_event(eventId, ip, datetime);
+	}
+	
+	const auto ip_ioc_reports = IOCDetector::detect_ioc_ip(network_events);
+	if (!ip_ioc_reports.empty())
+	{
+		// ioc detector
+		const std::vector<PNetworkEvent>::iterator it = network_events.begin();
+		block_ip((*it)->DestAddress);
 		// HttpClient::send_event(eventId, ip, datetime);
 	}
 
