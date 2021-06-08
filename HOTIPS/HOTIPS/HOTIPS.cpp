@@ -27,6 +27,7 @@ void OnEventCallback(PNetworkEvent event) {
 	case EVENT_TRACE_TYPE_ACCEPT:					eventType = L"Accept event"; break;
 	case EVENT_TRACE_TYPE_CONNECT:					eventType = L"Connect event"; break;
 	case EVENT_TRACE_TYPE_SEND:						eventType = L"Send event"; break;
+	case EVENT_TRACE_TYPE_RECONNECT:				eventType = L"Reconnect event"; break;
 	default:										return;
 	}
 	
