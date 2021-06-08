@@ -80,8 +80,6 @@ void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
 			parsedEvent.DestAddress = prop.GetIpAddress().c_str();
 		else if (prop.Name == L"sport") {
 			parsedEvent.SourcePort = _byteswap_ushort(prop.GetValue<uint16_t>());			
-			//if (parsedEvent.SourcePort == 59668)
-			//	break;
 		}
 		else if (prop.Name == L"dport")
 			parsedEvent.DestPort = _byteswap_ushort(prop.GetValue<uint16_t>());
