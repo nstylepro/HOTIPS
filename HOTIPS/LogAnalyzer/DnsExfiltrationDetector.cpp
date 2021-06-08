@@ -1,13 +1,13 @@
 #include "DnsExfiltrationDetector.h"
 
-bool DnsExfiltrationDetector::IsDnsPacket(uint16_t dPort) const
+bool DnsExfiltrationDetector::is_dns_packet(const uint16_t d_port)
 {
-	return dPort == m_dnsPort;
+	return d_port == m_dnsPort;
 }
 
-bool DnsExfiltrationDetector::DetectDnsExfiltration(uint32_t packetSize) const
+bool DnsExfiltrationDetector::detect_dns_exfiltration(const uint32_t packet_size)
 {
-	if (packetSize > m_packetSizeThreshold)
+	if (packet_size > m_packetSizeThreshold)
 	{
 		return true;
 	}
