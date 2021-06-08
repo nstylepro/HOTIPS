@@ -15,7 +15,8 @@ struct EventProperty {
 	EVENT_PROPERTY_INFO& Info;
 
 	template<typename T>
-	T GetValue() const {
+	T GetValue() const 
+	{
 		static_assert(std::is_pod<T>() && !std::is_pointer<T>());
 		return *(T*)Data;
 	}
