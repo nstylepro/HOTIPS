@@ -19,6 +19,8 @@ enum EventTask {
 	KERNEL_NETWORK_TASK_UDPIP = 11,
 };
 
+unsigned short _byteswap_ushort(unsigned short value);
+
 typedef struct NetworkEvent
 {
 	uint32_t EventType;
