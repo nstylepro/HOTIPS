@@ -19,16 +19,19 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 	SystemTimeToFileTime(&st, &ft);
 
 	// Makes a vector of SourceAddress, DestAddress, DestPort
-	std::vector<std::tuple<std::wstring, std::wstring, uint16_t>> ports_tuples;
+	std::vector<std::tuple<std::wstring, std::wstring, uint16_t>> ports_tuple;
 	std::vector<report_event> reports;
+	
+	ports_tuple.reserve(network_events.size());
+	reports.reserve(network_events.size());
 	for (const auto& element : network_events)
 	{
-		ports_tuples.emplace_back(element->SourceAddress, element->DestAddress, element->DestPort);
+		ports_tuple.emplace_back(std::make_tuple(element->SourceAddress, element->DestAddress, element->DestPort));
 	}
 
 	// Key: DestAddress, Value: <Key : Port, Value: Count>
 	std::map<std::wstring, std::vector<uint16_t>> addr_port_pair_count_map;
-	for (std::tuple<std::wstring, std::wstring, uint16_t> packet : ports_tuples)
+	for (std::tuple<std::wstring, std::wstring, uint16_t> packet : ports_tuple)
 	{
 		std::wstring src_ip = std::get<0>(packet);
 		std::wstring dst_ip = std::get<1>(packet);
@@ -38,7 +41,7 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 		if (dst_addr_key != addr_port_pair_count_map.end())
 		{
 
-			dst_addr_key->second.emplace_back(dst_port);
+			dst_addr_key->second.push_back(dst_port);
 		}
 		else
 		{
@@ -54,7 +57,7 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 		{
 			std::vector<uint16_t> src_ports_arr;
 			auto report = report_event(c_alert_name, ft, network_events.front()->SourceAddress, addr_port_count.first.c_str(), src_ports_arr, addr_port_count.second);
-			reports.emplace_back(report);
+			reports.push_back(report);
 		}
 	}
 

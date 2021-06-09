@@ -167,7 +167,31 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ETWCollector\ETWCollector.vcxproj">
+      <Project>{6f3388b0-00b6-48e7-b425-7e51cc91839a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HOTIPSActions\HOTIPSActions.vcxproj">
+      <Project>{ee91203f-7aa3-4249-b0de-218c99472f55}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\HOTIPS\HOTIPS.vcxproj">
+      <Project>{3d580d0f-fa64-4585-9a8b-ead223cb1c46}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LogAnalyzer\LogAnalyzer.vcxproj">
+      <Project>{a09e7bdc-84cd-4331-a00e-92a07af06f4e}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.210204.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+  </Target>
 </Project>
