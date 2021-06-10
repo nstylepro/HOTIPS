@@ -4,8 +4,8 @@
 #include <atltime.h>
 #include <atlstr.h>
 #include <chrono>
-#include <ctime>    
-
+#include <ctime>  
+#include <iostream>  
 
 #include "Timer.h"
 #include "../LogAnalyzer/Orchestrator.h"
@@ -31,6 +31,17 @@ void OnEventCallback(PNetworkEvent event) {
 	default:										return;
 	}
 	
+	std::wcout << (PCWSTR)CTime(event->EventTime).Format(L"%c") \
+		<< ", " << eventType \
+		<< ", Protocol: " << protocol \
+		<< ", PID: " << event->PID \
+		<< ", Source Address: " << event->SourceAddress \
+		<< ", Destination Address: " << event->DestAddress \
+		<< ", Source Port: " << event->SourcePort \
+		<< ", Destination Port: " << event->DestPort \
+		<< ", Packet Size: " << event->PacketSize \
+		<< std::endl;
+
 	// Initiate 60s time frame
 	if (!m_current_window_start.is_set())
 	{
