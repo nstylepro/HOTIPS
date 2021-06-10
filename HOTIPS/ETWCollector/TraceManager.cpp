@@ -38,8 +38,8 @@ bool TraceManager::Start(std::function<void(PNetworkEvent)> cb) {
 	if (!_hTrace)
 		return false;
 
-	FlushTraceA(_hTrace, NULL, _properties);
-
+	ControlTrace(_hTrace, loggerName, _properties, EVENT_TRACE_CONTROL_FLUSH);
+	
 	// create a dedicated thread to process the trace
 	_hProcessThread.reset(::CreateThread(nullptr, 0, [](auto param) {
 		return ((TraceManager*)param)->Run();
@@ -78,9 +78,8 @@ void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
 			parsedEvent.SourceAddress = prop.GetIpAddress().c_str();
 		else if (prop.Name == L"daddr")
 			parsedEvent.DestAddress = prop.GetIpAddress().c_str();
-		else if (prop.Name == L"sport") {
+		else if (prop.Name == L"sport") 
 			parsedEvent.SourcePort = _byteswap_ushort(prop.GetValue<uint16_t>());			
-		}
 		else if (prop.Name == L"dport")
 			parsedEvent.DestPort = _byteswap_ushort(prop.GetValue<uint16_t>());
 		else if (prop.Name == L"PID")
