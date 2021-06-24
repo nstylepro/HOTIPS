@@ -16,5 +16,5 @@ class IOCDetector
 	static const std::set<std::wstring> m_ioc_ips;
 
 public:
-	static std::vector<report_event> detect_ioc_ip(std::vector<PNetworkEvent>& network_events);
+	static std::list<report_event> detect_ioc_ip(std::list<PNetworkEvent>& network_events);
 };

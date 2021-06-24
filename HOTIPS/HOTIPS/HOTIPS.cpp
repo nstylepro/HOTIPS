@@ -15,7 +15,7 @@ using namespace std::chrono;
 TraceManager* g_pMgr;
 HANDLE g_hEvent;
 char buffer[256];
-std::vector<PNetworkEvent> m_events = {};
+std::list<PNetworkEvent> m_events = {};
 Timer<milliseconds, steady_clock> m_current_window_start;
 
 void OnEventCallback(PNetworkEvent event) {
@@ -37,9 +37,12 @@ void OnEventCallback(PNetworkEvent event) {
 		m_current_window_start.tick();
 	}
 
+	if (std::wcscmp(L"192.168.1.1", event->DestAddress.c_str()) != 0)
+		return;
+	
 	// Check elapsed time
 	m_current_window_start.tock();
-	if (m_current_window_start.duration().count() >= 60000)
+	if (m_current_window_start.duration().count() >= 6000)
  	{
 		// Pass events to detections
 		Orchestrator::event_orchestrator(m_events);
@@ -55,6 +58,7 @@ void OnEventCallback(PNetworkEvent event) {
 
 int main() {
 	TraceManager mgr;
+	printf("Started Listener\n");
 
 	if (!mgr.Start(OnEventCallback)) {
 		printf("Failed to start trace. Are you running elevated?\n");

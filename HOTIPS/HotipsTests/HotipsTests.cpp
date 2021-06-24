@@ -98,7 +98,7 @@ namespace HotipsTests
 			}
 
 			try {
-				const auto report = IPSweepDetector::detect_ip_sweep(network_events);
+				auto report = IPSweepDetector::detect_ip_sweep(network_events);
 				std::cout << "Reports Count" << report.size() << std::endl;
 			}
 			catch (char* s) {

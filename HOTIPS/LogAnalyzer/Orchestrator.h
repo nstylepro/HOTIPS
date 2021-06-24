@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <list>
 
 #include "../ETWCollector/TraceManager.h"
 
@@ -9,7 +9,7 @@ class Orchestrator
 	//char datetime[] = "05/05/2021%2015:44";
 
 public:
-	static void event_orchestrator(std::vector<PNetworkEvent> network_events);
+	static void event_orchestrator(std::list<PNetworkEvent> network_events);
 	static FILETIME& get_file_time();
 };
 
