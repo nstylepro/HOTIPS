@@ -6,20 +6,20 @@
 #include <ostream>
 #include <string>
 #include <utility>
-#include <vector>
+#include <list>
 #include <xtree>
 
 class report_event
 {
 	std::wstring _src_ip = L"";
 	std::wstring _dst_ip = L"";
-	std::vector<uint16_t> _src_ports;
-	std::vector<uint16_t> _dst_ports;
+	std::list<uint16_t> _src_ports;
+	std::list<uint16_t> _dst_ports;
 	std::wstring _alert_name = L"";
 	FILETIME _event_time;
 	
 public:
-	report_event(const std::wstring& alert_name, const FILETIME& event_time, std::wstring src_ip, std::wstring dst_ip, std::vector<uint16_t> src_ports, std::vector<uint16_t> dst_ports)
+	report_event(const std::wstring& alert_name, const FILETIME& event_time, std::wstring src_ip, std::wstring dst_ip, std::list<uint16_t> src_ports, std::list<uint16_t> dst_ports)
 	{
 		_alert_name = alert_name;
 		_event_time = event_time;
@@ -29,7 +29,7 @@ public:
 		_dst_ports = std::move(dst_ports);
 	}
 
-	report_event(const wchar_t* alert_name, const FILETIME& ft, const std::wstring& src_ip, const std::wstring& dst_ip, const std::vector<uint16_t> src_ports, const std::vector<uint16_t> dst_ports)
+	report_event(const wchar_t* alert_name, const FILETIME& ft, const std::wstring& src_ip, const std::wstring& dst_ip, const std::list<uint16_t> src_ports, const std::list<uint16_t> dst_ports)
 	{
 		_alert_name = alert_name;
 		_event_time = ft;
@@ -39,7 +39,7 @@ public:
 		_dst_ports = dst_ports;
 	}
 
-	report_event(std::wstring::const_pointer alert_name, const FILETIME& ft, const std::wstring& src_ip, std::wstring::const_pointer dst_ip, const std::vector<unsigned short>& src_ports, const std::vector<unsigned short>& dst_ports)
+	report_event(std::wstring::const_pointer alert_name, const FILETIME& ft, const std::wstring& src_ip, std::wstring::const_pointer dst_ip, const std::list<unsigned short>& src_ports, const std::list<unsigned short>& dst_ports)
 	{
 		_alert_name = alert_name;
 		_event_time = ft;

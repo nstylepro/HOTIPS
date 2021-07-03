@@ -22,12 +22,23 @@ bool TraceManager::Start(std::function<void(PNetworkEvent)> cb) {
 	_properties->Wnode.ClientContext = 1;
 	_properties->LogFileMode = EVENT_TRACE_REAL_TIME_MODE;
 	_properties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
+	
+	WCHAR loggerName[] = KERNEL_LOGGER_NAME;
 
-	auto error = ::StartTrace(&_handle, KERNEL_LOGGER_NAME, _properties);
+	// Flush Events
+	auto error = ControlTrace(NULL, loggerName, _properties, EVENT_TRACE_CONTROL_STOP);
+	if (error != ERROR_SUCCESS && error != ERROR_MORE_DATA && error != ERROR_WMI_INSTANCE_NOT_FOUND)
+	{
+		throw;
+	}
+
+
+
+	error = ::StartTrace(&_handle, KERNEL_LOGGER_NAME, _properties);
 	if (error != ERROR_SUCCESS && error != ERROR_ALREADY_EXISTS)
 		return false;
 
-	WCHAR loggerName[] = KERNEL_LOGGER_NAME;
+	
 	_traceLog.Context = this;
 	_traceLog.LoggerName = loggerName;
 	_traceLog.ProcessTraceMode = PROCESS_TRACE_MODE_EVENT_RECORD | PROCESS_TRACE_MODE_REAL_TIME;
@@ -37,11 +48,18 @@ bool TraceManager::Start(std::function<void(PNetworkEvent)> cb) {
 	_hTrace = ::OpenTrace(&_traceLog);
 	if (!_hTrace)
 		return false;
-
+	
 	// create a dedicated thread to process the trace
 	_hProcessThread.reset(::CreateThread(nullptr, 0, [](auto param) {
 		return ((TraceManager*)param)->Run();
 		}, this, 0, nullptr));
+
+	// Flush Events
+	error = ControlTrace(_hTrace, loggerName, _properties, EVENT_TRACE_CONTROL_FLUSH);
+	if (ERROR_SUCCESS != error)
+	{
+		throw;
+	}
 
 	return true;
 }
@@ -76,15 +94,15 @@ void TraceManager::OnEventRecord(PEVENT_RECORD rec) {
 			parsedEvent.SourceAddress = prop.GetIpAddress().c_str();
 		else if (prop.Name == L"daddr")
 			parsedEvent.DestAddress = prop.GetIpAddress().c_str();
-		else if (prop.Name == L"sport")
-			parsedEvent.SourcePort = prop.GetValue<uint16_t>();
+		else if (prop.Name == L"sport") 
+			parsedEvent.SourcePort = _byteswap_ushort(prop.GetValue<uint16_t>());			
 		else if (prop.Name == L"dport")
-			parsedEvent.DestPort = prop.GetValue<uint16_t>();
+			parsedEvent.DestPort = _byteswap_ushort(prop.GetValue<uint16_t>());
 		else if (prop.Name == L"PID")
 			parsedEvent.PID = prop.GetValue<uint32_t>();
 		else if (prop.Name == L"size")
 			parsedEvent.PacketSize = prop.GetValue<uint32_t>();
-	}
+ 	}
 
 	if (_callback)
 		_callback(&parsedEvent);

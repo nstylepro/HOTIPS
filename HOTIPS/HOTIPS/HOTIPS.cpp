@@ -4,10 +4,13 @@
 #include <atltime.h>
 #include <atlstr.h>
 #include <chrono>
-#include <ctime>    
+#include <ctime>  
+#include <iostream>  
+#include <set>
 
 
 #include "Timer.h"
+#include <string.h>
 #include "../LogAnalyzer/Orchestrator.h"
 
 using namespace std::chrono;
@@ -15,27 +18,29 @@ using namespace std::chrono;
 TraceManager* g_pMgr;
 HANDLE g_hEvent;
 char buffer[256];
-std::vector<PNetworkEvent> m_events = {};
+std::list<PNetworkEvent> m_events = {};
 Timer<milliseconds, steady_clock> m_current_window_start;
 
 void OnEventCallback(PNetworkEvent event) {
 
 	std::wstring protocol(L"TCP"); // Currently default
 
-	std::wstring eventType;
+	std::wstring eventType;	
 	switch (event->EventType) {
 	case EVENT_TRACE_TYPE_ACCEPT:					eventType = L"Accept event"; break;
 	case EVENT_TRACE_TYPE_CONNECT:					eventType = L"Connect event"; break;
 	case EVENT_TRACE_TYPE_SEND:						eventType = L"Send event"; break;
+	case EVENT_TRACE_TYPE_CONNFAIL:					eventType = L"Failed connect event"; break;
+	case EVENT_TRACE_TYPE_RECONNECT:				eventType = L"Reconnect event"; break;
 	default:										return;
 	}
-	
+
 	// Initiate 60s time frame
 	if (!m_current_window_start.is_set())
 	{
 		m_current_window_start.tick();
 	}
-
+	
 	// Check elapsed time
 	m_current_window_start.tock();
 	if (m_current_window_start.duration().count() >= 60000)
@@ -54,6 +59,7 @@ void OnEventCallback(PNetworkEvent event) {
 
 int main() {
 	TraceManager mgr;
+	printf("Started Listener\n");
 
 	if (!mgr.Start(OnEventCallback)) {
 		printf("Failed to start trace. Are you running elevated?\n");

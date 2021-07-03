@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LogAnalyzer", "LogAnalyzer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HOTIPSActions", "HOTIPSActions\HOTIPSActions.vcxproj", "{EE91203F-7AA3-4249-B0DE-218C99472F55}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HotipsTests", "HotipsTests\HotipsTests.vcxproj", "{412422C1-D62B-4CA0-93B0-7E9601FE3739}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{EE91203F-7AA3-4249-B0DE-218C99472F55}.Release|x64.Build.0 = Release|x64
 		{EE91203F-7AA3-4249-B0DE-218C99472F55}.Release|x86.ActiveCfg = Release|Win32
 		{EE91203F-7AA3-4249-B0DE-218C99472F55}.Release|x86.Build.0 = Release|Win32
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Debug|x64.ActiveCfg = Debug|x64
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Debug|x64.Build.0 = Debug|x64
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Debug|x86.ActiveCfg = Debug|Win32
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Debug|x86.Build.0 = Debug|Win32
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Release|x64.ActiveCfg = Release|x64
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Release|x64.Build.0 = Release|x64
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Release|x86.ActiveCfg = Release|Win32
+		{412422C1-D62B-4CA0-93B0-7E9601FE3739}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
