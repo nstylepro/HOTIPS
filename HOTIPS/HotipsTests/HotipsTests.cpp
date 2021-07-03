@@ -72,7 +72,7 @@ namespace HotipsTests
 
 		TEST_METHOD(TestMethod1)
 		{
-			std::vector<PNetworkEvent> network_events = {};
+			std::list<PNetworkEvent> network_events = {};
 			for (int i = 0; i < 150; i++)
 			{
 				network_events.push_back(gen_tcp_port_scan_event());
@@ -91,7 +91,7 @@ namespace HotipsTests
 
 		TEST_METHOD(TestMethod2)
 		{
-			std::vector<PNetworkEvent> network_events = {};
+			std::list<PNetworkEvent> network_events = {};
 			for (int i = 0; i < 150; i++)
 			{
 				network_events.emplace_back(gen_tcp_port_scan_event());

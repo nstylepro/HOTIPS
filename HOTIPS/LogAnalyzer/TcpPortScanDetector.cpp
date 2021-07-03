@@ -38,7 +38,6 @@ std::list<report_event> TcpPortScanDetector::detect_port_scan(std::list<PNetwork
 		auto dst_addr_key = addr_port_pair_count_map.find(dst_ip);
 		if (dst_addr_key != addr_port_pair_count_map.end())
 		{
-
 			dst_addr_key->second.push_back(dst_port);
 		}
 		else

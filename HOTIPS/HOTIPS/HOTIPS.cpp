@@ -6,8 +6,11 @@
 #include <chrono>
 #include <ctime>  
 #include <iostream>  
+#include <set>
+
 
 #include "Timer.h"
+#include <string.h>
 #include "../LogAnalyzer/Orchestrator.h"
 
 using namespace std::chrono;
@@ -22,38 +25,25 @@ void OnEventCallback(PNetworkEvent event) {
 
 	std::wstring protocol(L"TCP"); // Currently default
 
-	std::wstring eventType;
+	std::wstring eventType;	
 	switch (event->EventType) {
 	case EVENT_TRACE_TYPE_ACCEPT:					eventType = L"Accept event"; break;
 	case EVENT_TRACE_TYPE_CONNECT:					eventType = L"Connect event"; break;
 	case EVENT_TRACE_TYPE_SEND:						eventType = L"Send event"; break;
+	case EVENT_TRACE_TYPE_CONNFAIL:					eventType = L"Failed connect event"; break;
 	case EVENT_TRACE_TYPE_RECONNECT:				eventType = L"Reconnect event"; break;
 	default:										return;
 	}
-	
-	//std::wcout << (PCWSTR)CTime(event->EventTime).Format(L"%c") \
-	//	<< ", " << eventType \
-	//	<< ", Protocol: " << protocol \
-	//	<< ", PID: " << event->PID \
-	//	<< ", Source Address: " << event->SourceAddress \
-	//	<< ", Destination Address: " << event->DestAddress \
-	//	<< ", Source Port: " << event->SourcePort \
-	//	<< ", Destination Port: " << event->DestPort \
-	//	<< ", Packet Size: " << event->PacketSize \
-	//	<< std::endl;
 
 	// Initiate 60s time frame
 	if (!m_current_window_start.is_set())
 	{
 		m_current_window_start.tick();
 	}
-
-	if (std::wcscmp(L"192.168.1.1", event->DestAddress.c_str()) != 0)
-		return;
 	
 	// Check elapsed time
 	m_current_window_start.tock();
-	if (m_current_window_start.duration().count() >= 6000)
+	if (m_current_window_start.duration().count() >= 60000)
  	{
 		// Pass events to detections
 		Orchestrator::event_orchestrator(m_events);
