@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-
+#include <list>
 
 #include "report_event.h"
 #include "../ETWCollector/EventParser.h"
@@ -12,5 +12,5 @@ class TcpPortScanDetector
 	static const std::wstring c_alert_name;
 
 public:
-	static std::vector<report_event> detect_port_scan(std::vector<PNetworkEvent>& network_events);
+	static std::list<report_event> detect_port_scan(std::list<PNetworkEvent>& network_events);
 };

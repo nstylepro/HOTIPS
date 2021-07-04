@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
 #include <set>
-#include <vector>
 #include "report_event.h"
 
 #include "../ETWCollector/EventParser.h"
@@ -15,7 +13,6 @@ class IPSweepDetector
 	static const std::wstring _alert_name;
 
 public:
-	static std::vector<report_event> detect_ip_sweep(std::vector<PNetworkEvent>& network_events);
-	static uint32_t count_distinct_ip(std::vector<std::wstring> network_events, int event_count);
-	static std::set<std::wstring> convert_to_set(std::vector<std::wstring> v);
+	static std::list<report_event> detect_ip_sweep(std::list<PNetworkEvent>& network_events);
+	static std::set<std::wstring> convert_to_set(std::list<std::wstring> v);
 };

@@ -9,7 +9,7 @@
 const std::wstring TcpPortScanDetector::c_alert_name = L"TcpPortScan";
 
 
-std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNetworkEvent>& network_events)
+std::list<report_event> TcpPortScanDetector::detect_port_scan(std::list<PNetworkEvent>& network_events)
 {
 	// Get time
 	FILETIME ft;
@@ -18,17 +18,18 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 	GetSystemTime(&st); // gets current time
 	SystemTimeToFileTime(&st, &ft);
 
-	// Makes a vector of SourceAddress, DestAddress, DestPort
-	std::vector<std::tuple<std::wstring, std::wstring, uint16_t>> ports_tuples;
-	std::vector<report_event> reports;
+	// Makes a list of SourceAddress, DestAddress, DestPort
+	std::list<std::tuple<std::wstring, std::wstring, uint16_t>> ports_tuple;
+	std::list<report_event> reports;
+	
 	for (const auto& element : network_events)
 	{
-		ports_tuples.emplace_back(element->SourceAddress, element->DestAddress, element->DestPort);
+		ports_tuple.emplace_back(std::make_tuple(element->SourceAddress, element->DestAddress, element->DestPort));
 	}
 
 	// Key: DestAddress, Value: <Key : Port, Value: Count>
-	std::map<std::wstring, std::vector<uint16_t>> addr_port_pair_count_map;
-	for (std::tuple<std::wstring, std::wstring, uint16_t> packet : ports_tuples)
+	std::map<std::wstring, std::list<uint16_t>> addr_port_pair_count_map;
+	for (std::tuple<std::wstring, std::wstring, uint16_t> packet : ports_tuple)
 	{
 		std::wstring src_ip = std::get<0>(packet);
 		std::wstring dst_ip = std::get<1>(packet);
@@ -37,12 +38,11 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 		auto dst_addr_key = addr_port_pair_count_map.find(dst_ip);
 		if (dst_addr_key != addr_port_pair_count_map.end())
 		{
-
-			dst_addr_key->second.emplace_back(dst_port);
+			dst_addr_key->second.push_back(dst_port);
 		}
 		else
 		{
-			std::vector<uint16_t> ports = { dst_port };
+			std::list<uint16_t> ports = { dst_port };
 			addr_port_pair_count_map.insert(make_pair(dst_ip, ports));
 		}
 	}
@@ -52,9 +52,9 @@ std::vector<report_event> TcpPortScanDetector::detect_port_scan(std::vector<PNet
 	{
 		if (addr_port_count.second.size() >= c_port_count_threshold)
 		{
-			std::vector<uint16_t> src_ports_arr;
+			std::list<uint16_t> src_ports_arr;
 			auto report = report_event(c_alert_name, ft, network_events.front()->SourceAddress, addr_port_count.first.c_str(), src_ports_arr, addr_port_count.second);
-			reports.emplace_back(report);
+			reports.push_back(report);
 		}
 	}
 
