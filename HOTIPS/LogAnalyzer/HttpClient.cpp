@@ -6,7 +6,7 @@
 #include <string>
 #include <cstdio>
 
-void HttpClient::send_event(int eventId, char* ip, char* datetime)
+void HttpClient::send_event(int eventId, char* ip, char* datetime, const char* description)
 {
 	WSAData wsa_data{};
 	if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
@@ -46,7 +46,7 @@ void HttpClient::send_event(int eventId, char* ip, char* datetime)
 		"Connection: close\r\n"
 		"\r\n";
 
-	const auto s_post = "event=" + std::to_string(eventId) + "," + std::string(ip) + "," + std::string(datetime);
+	const auto s_post = "event=" + std::to_string(eventId) + "," + std::string(ip) + "," + std::string(datetime) + "," + std::string(description);
 
 	CHAR s_header[sizeof(s_header_tpl) + 100];
 	CHAR s_recv[1000];

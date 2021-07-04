@@ -7,6 +7,6 @@
 class HttpClient
 {
 public:
-	static void send_event(int eventId, char* ip, char* datetime);
+	static void send_event(int eventId, char* ip, char* datetime, const char* description);
 };
 

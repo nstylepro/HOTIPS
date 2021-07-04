@@ -30,7 +30,7 @@ void Orchestrator::event_orchestrator(std::list<PNetworkEvent> network_events)
 
 		// Convert wchar to char
 		const _bstr_t b_ip((*it)->DestAddress.c_str());
-		HttpClient::send_event(eventId, b_ip, datetime);
+		HttpClient::send_event(eventId, b_ip, datetime, "TCP Scan Detected");
 	}
 
 	const auto ip_sweep_reports = IPSweepDetector::detect_ip_sweep(network_events);
@@ -40,7 +40,7 @@ void Orchestrator::event_orchestrator(std::list<PNetworkEvent> network_events)
 		block_icmp();
 		const std::list<PNetworkEvent>::iterator it = network_events.begin();
 		const _bstr_t b_ip((*it)->DestAddress.c_str());
-		HttpClient::send_event(eventId, b_ip, datetime);
+		HttpClient::send_event(eventId, b_ip, datetime, "IP Sweep Detected");
 	}
 	
 	const auto ip_ioc_reports = IOCDetector::detect_ioc_ip(network_events);
@@ -50,7 +50,7 @@ void Orchestrator::event_orchestrator(std::list<PNetworkEvent> network_events)
 		const std::list<PNetworkEvent>::iterator it = network_events.begin();
 		block_ip((*it)->DestAddress);
 		const _bstr_t b_ip((*it)->DestAddress.c_str());
-		HttpClient::send_event(eventId, b_ip, datetime);
+		HttpClient::send_event(eventId, b_ip, datetime, "Malicious IOC Detected");
 	}
 
 	FILETIME time = get_file_time();
@@ -69,7 +69,7 @@ void Orchestrator::event_orchestrator(std::list<PNetworkEvent> network_events)
 			
 			block_udp_ip_port(53, packet->DestAddress);
 			const _bstr_t b_ip(packet->DestAddress.c_str());
-			HttpClient::send_event(eventId, b_ip, datetime);
+			HttpClient::send_event(eventId, b_ip, datetime, "DNS Exfiltration");
 		}	
 	}	
 }
